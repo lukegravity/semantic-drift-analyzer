@@ -173,7 +173,7 @@ Each dot = one URL.
 You can interpret the map like this:
 
 - **Big but faint** → high traffic, weak linking
-- **Small and far away** → thin or off-topic content
+- **Small and far away** → thin or off-topic content 🔎🐄
 - **Far + bright** → strong but topical outlier
 
 ---
