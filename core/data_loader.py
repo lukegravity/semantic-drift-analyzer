@@ -33,10 +33,27 @@ def load_screaming_frog(file):
 
     return df
 
-
 def load_gsc(path):
     df = pd.read_csv(path)
-    df['Page'] = df['Page'].apply(normalise_url)
+
+    # --- Normalise column headers ---
+    df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
+
+    # --- Gracefully handle alternate GSC column names ---
+    rename_map = {
+        "top_pages": "page",
+        "pages": "page",
+        "page_url": "page"
+    }
+    df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns}, inplace=True)
+
+    # --- Ensure 'page' column exists ---
+    if "page" not in df.columns:
+        raise ValueError("GSC file must contain a 'Page' or 'Top Pages' column.")
+
+    # --- Normalise URLs ---
+    df["page"] = df["page"].apply(normalise_url)
+
     return df
 
 def merge_data(sf_df, gsc_df):
