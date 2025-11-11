@@ -1,0 +1,26 @@
+# venvs
+.venv/
+venv/
+env/
+
+# Python cruft
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Streamlit
+.streamlit/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local data exports / test files
+*.csv
+*.xlsx
+*.parquet
+*.log
+
+# VSCode
+.vscode/
