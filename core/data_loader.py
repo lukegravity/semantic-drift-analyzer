@@ -58,3 +58,18 @@ def load_gsc(path):
 
     df["Page"] = df["Page"].apply(normalise_url)
     return df
+
+def merge_data(sf_df, gsc_df):
+    df = sf_df.merge(gsc_df, left_on='Address', right_on='Page', how='left')
+    df['Clicks'] = df['Clicks'].fillna(0)
+    df['CTR'] = df['CTR'].fillna(0)
+    df['Impressions'] = df['Impressions'].fillna(0)
+    return df
+
+def parse_embedding(value):
+    try:
+        if isinstance(value, str):
+            return np.array(ast.literal_eval(value))
+    except Exception:
+        return np.nan
+    return np.nan
