@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import ast
 from utils.normalise import normalise_url
+import chardet
 from utils.parser import parse_embedding
 
 def load_screaming_frog(file):
@@ -34,28 +35,26 @@ def load_screaming_frog(file):
     return df
 
 def load_gsc(path):
-    import chardet
+    # Detect encoding first (read small sample)
+    raw = path.read()
+    result = chardet.detect(raw)
+    encoding = result["encoding"] or "utf-8"
 
-    # --- Detect encoding (Google CSVs often come with BOM) ---
-    with open(path, "rb") as f:
-        raw = f.read(2048)
-    enc = chardet.detect(raw)["encoding"] or "utf-8"
+    # Reload with detected encoding
+    from io import BytesIO
+    df = pd.read_csv(BytesIO(raw), encoding=encoding)
 
-    df = pd.read_csv(path, encoding=enc)
+    # Handle both 'Page' and 'Top pages'
+    if "Page" in df.columns:
+        page_col = "Page"
+    elif "Top pages" in df.columns:
+        page_col = "Top pages"
+    elif "Top Pages" in df.columns:
+        page_col = "Top Pages"
+    else:
+        raise KeyError("Expected column 'Page' or 'Top pages' not found in GSC CSV.")
 
-    # --- Normalise column headers (strip, lower, remove BOMs) ---
-    df.columns = [col.strip().replace("\ufeff", "").lower() for col in df.columns]
-
-    # --- Try to identify the correct page column dynamically ---
-    possible_cols = [c for c in df.columns if "page" in c]
-    if not possible_cols:
-        raise KeyError(
-            f"No 'Page' or 'Top Pages' column found. Columns detected: {list(df.columns)}"
-        )
-
-    page_col = possible_cols[0]
     df.rename(columns={page_col: "Page"}, inplace=True)
-
     df["Page"] = df["Page"].apply(normalise_url)
     return df
 
