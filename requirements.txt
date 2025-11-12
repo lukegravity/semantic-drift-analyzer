@@ -4,3 +4,4 @@ numpy
 altair
 umap-learn
 scikit-learn
+chardet==5.2.0
