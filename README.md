@@ -79,10 +79,6 @@ pip install -r requirements.txt
 
 ```
 
-> 💡 You can prune requirements.txt later if the freeze was too large.
-
----
-
 ## Running the App
 
 ```
