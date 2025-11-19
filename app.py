@@ -9,7 +9,11 @@ import time
 
 st.set_page_config(page_title="Semantic Drift Analyser", layout="wide")
 st.title("🧭 Semantic Drift Analyser")
-st.markdown("*Visualise how your content drifts from your site's core topics*")
+st.markdown(
+    "*Visualise how your content drifts from your site's core topics*\n\n"
+    "[Built by Luke Taylor](https://www.linkedin.com/in/luketayloruk/)"
+)
+
 
 # --- File upload in collapsible section ---
 with st.expander("📁 Upload Data", expanded=True):
