@@ -34,6 +34,7 @@ if sf_file and gsc_file:
             sf_df = load_screaming_frog(sf_file)
             gsc_df = load_gsc(gsc_file)
             df = merge_data(sf_df, gsc_df)
+            # st.write("DF columns BEFORE processing:", df.columns.tolist())   # ← ADD THIS
             
             st.write("Computing drift metrics...")
             centroid, df = compute_centroid(df)
